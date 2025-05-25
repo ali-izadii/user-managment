@@ -286,13 +286,14 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 ```
 user-management-system/
-├── 📁 cmd/                          # Application entry points
+├── 📁 cmd/                         # Application entry points
 │   ├── server/main.go              # HTTP server
 │   ├── migrate/main.go             # Database migrations
 │   └── seed/main.go                # Data seeding
-├── 📁 internal/                     # Private application code
+├── 📁 internal/                    # Private application code
 │   ├── api/                        # HTTP layer
 │   │   ├── handlers/               # HTTP handlers
+│   │   ├── dto/                    # HTTP dtos
 │   │   ├── middleware/             # HTTP middleware
 │   │   └── routes/                 # Route definitions
 │   ├── auth/                       # Authentication logic
@@ -311,10 +312,10 @@ user-management-system/
 │   ├── unit/                       # Unit tests  
 │   └── fixtures/                   # Test data
 ├── 📁 docker/                      # Docker configuration
-├── 📄 docker-compose.yml          # Local development setup
-├── 📄 Dockerfile                  # Production container
-├── 📄 .env.example                # Environment template
-└── 📄 README.md                   # This file
+├── 📄 docker-compose.yml           # Local development setup
+├── 📄 Dockerfile                   # Production container
+├── 📄 .env.example                 # Environment template
+└── 📄 README.md                    # This file
 ```
 
 ---
