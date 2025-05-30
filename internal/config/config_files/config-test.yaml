@@ -3,6 +3,7 @@ server:
   run_mode: asc
 
 postgres:
+  uri: postgresql://fuck:you@db.wgrrgsmvfjxkdaglooiv.supabase.co:5432/postgres
   username: user
   password: pass
   host: localhost
