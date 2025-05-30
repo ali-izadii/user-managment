@@ -24,6 +24,7 @@ type PostgresConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	Database string `yaml:"database"`
+	Uri      string `yaml:"Uri"`
 }
 
 func parseConfig(v *viper.Viper) (*Config, error) {
