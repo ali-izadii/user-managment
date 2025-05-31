@@ -6,6 +6,7 @@ import (
 	"log"
 	"path/filepath"
 	"runtime"
+	"time"
 )
 
 type Config struct {
@@ -19,11 +20,17 @@ type ServerConfig struct {
 }
 
 type PostgresConfig struct {
-	Host     string `yaml:"host"`
-	Port     string `yaml:"port"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	Database string `yaml:"database"`
+	Host        string        `yaml:"host"`
+	Port        int32         `yaml:"port"`
+	Username    string        `yaml:"username"`
+	Password    string        `yaml:"password"`
+	Database    string        `yaml:"database"`
+	SSLMode     string        `yaml:"ssl_mode"`
+	MaxConns    int32         `json:"max_conns"`
+	MinConns    int32         `json:"min_conns"`
+	MaxLifetime time.Duration `json:"max_lifetime"`
+	MaxIdleTime time.Duration `json:"max_idle_time"`
+	HealthCheck time.Duration `json:"health_check"`
 }
 
 func parseConfig(v *viper.Viper) (*Config, error) {
