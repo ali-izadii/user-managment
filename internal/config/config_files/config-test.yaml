@@ -3,8 +3,14 @@ server:
   run_mode: asc
 
 postgres:
-  username: user
-  password: pass
-  host: localhost
+  username: "user"
+  password: "pass"
+  host: "localhost"
   port: 5432
-  database: db
+  database: "db"
+  ssl_mode: "disable"
+  max_conns: 10
+  min_conns: 1
+  max_lifetime: "30m"
+  max_idle_time: "10m"
+  health_check: "1m"

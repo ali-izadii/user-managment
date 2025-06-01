@@ -10,36 +10,36 @@ import (
 )
 
 type Config struct {
-	Server   ServerConfig   `yaml:"server"`
-	Postgres PostgresConfig `yaml:"postgres"`
+	Server   ServerConfig   `mapstructure:"server"`
+	Postgres PostgresConfig `mapstructure:"postgres"`
 }
 
 type ServerConfig struct {
-	Port    string `yaml:"port"`
-	RunMode string `yaml:"run_mode"`
+	Port    string `mapstructure:"port"`
+	RunMode string `mapstructure:"run_mode"`
 }
 
 type PostgresConfig struct {
-	Host        string        `yaml:"host"`
-	Port        int32         `yaml:"port"`
-	Username    string        `yaml:"username"`
-	Password    string        `yaml:"password"`
-	Database    string        `yaml:"database"`
-	SSLMode     string        `yaml:"ssl_mode"`
-	MaxConns    int32         `json:"max_conns"`
-	MinConns    int32         `json:"min_conns"`
-	MaxLifetime time.Duration `json:"max_lifetime"`
-	MaxIdleTime time.Duration `json:"max_idle_time"`
-	HealthCheck time.Duration `json:"health_check"`
+	Host        string        `mapstructure:"host"`
+	Port        int           `mapstructure:"port"`
+	Username    string        `mapstructure:"username"`
+	Password    string        `mapstructure:"password"`
+	Database    string        `mapstructure:"database"`
+	SSLMode     string        `mapstructure:"ssl_mode"`
+	MaxConns    int32         `mapstructure:"max_conns"`
+	MinConns    int32         `mapstructure:"min_conns"`
+	MaxLifetime time.Duration `mapstructure:"max_lifetime"`
+	MaxIdleTime time.Duration `mapstructure:"max_idle_time"`
+	HealthCheck time.Duration `mapstructure:"health_check"`
 }
 
 func parseConfig(v *viper.Viper) (*Config, error) {
-	var config *Config
+	var config Config
 	err := v.Unmarshal(&config)
 	if err != nil {
 		log.Printf("unable to decode struct, %v\n", err)
 	}
-	return config, nil
+	return &config, nil
 }
 
 func localConfig(fileName string, fileType string) (*viper.Viper, error) {
