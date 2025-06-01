@@ -4,16 +4,17 @@ import (
 	"context"
 	"fmt"
 	"github.com/docker/go-connections/nat"
+	"github.com/google/uuid"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"strconv"
+	"time"
 	"user-management/internal/config"
+	"user-management/internal/models"
 )
 
 type PostgresContainer struct {
 	Container        *postgres.PostgresContainer
 	ConnectionString string
-	Host             string
-	Port             int
 }
 
 func setupPostgresContainer(ctx context.Context, config config.PostgresConfig) (*PostgresContainer, error) {
@@ -47,4 +48,19 @@ func setupPostgresContainer(ctx context.Context, config config.PostgresConfig) (
 		Container:        postgresContainer,
 		ConnectionString: connectionString,
 	}, nil
+}
+
+func newUser(id uuid.UUID, email string) *models.User {
+	return &models.User{
+		ID:            id,
+		Email:         email,
+		Password:      "pass",
+		FirstName:     "Ali",
+		LastName:      "Izadi",
+		Bio:           "Toole",
+		PhoneNumber:   "09170777331",
+		EmailVerified: true,
+		IsActive:      true,
+		LastLoginAt:   time.Now(),
+	}
 }
