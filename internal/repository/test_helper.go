@@ -5,8 +5,13 @@ import (
 	"fmt"
 	"github.com/docker/go-connections/nat"
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
+	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
+	"strings"
 	"time"
 	"user-management/internal/config"
 	"user-management/internal/models"
@@ -50,6 +55,48 @@ func setupPostgresContainer(ctx context.Context, config config.PostgresConfig) (
 	}, nil
 }
 
+func runSQLFiles(ctx context.Context, db *pgxpool.Pool, sqlDir string) error {
+	files, err := os.ReadDir(sqlDir)
+	if err != nil {
+		return fmt.Errorf("failed to read SQL directory %s: %w", sqlDir, err)
+	}
+
+	var sqlFiles []string
+	for _, file := range files {
+		if !file.IsDir() && strings.HasSuffix(file.Name(), ".sql") {
+			sqlFiles = append(sqlFiles, file.Name())
+		}
+	}
+
+	sort.Strings(sqlFiles)
+
+	if len(sqlFiles) == 0 {
+		fmt.Printf("No .sql files found in %s\n", sqlDir)
+		return nil
+	}
+
+	for _, filename := range sqlFiles {
+		fmt.Printf("Executing %s...\n", filename)
+
+		filePath := filepath.Join(sqlDir, filename)
+		sqlContent, err := os.ReadFile(filePath)
+		if err != nil {
+			return fmt.Errorf("failed to read SQL file %s: %w", filename, err)
+		}
+
+		// Execute SQL
+		_, err = db.Exec(ctx, string(sqlContent))
+		if err != nil {
+			return fmt.Errorf("failed to execute SQL file %s: %w", filename, err)
+		}
+
+		fmt.Printf("✓ %s executed successfully\n", filename)
+	}
+
+	fmt.Printf("All SQL files executed! (%d files)\n", len(sqlFiles))
+	return nil
+}
+
 func newUser(id uuid.UUID, email string) *models.User {
 	return &models.User{
 		ID:            id,
@@ -57,10 +104,10 @@ func newUser(id uuid.UUID, email string) *models.User {
 		Password:      "pass",
 		FirstName:     "Ali",
 		LastName:      "Izadi",
-		Bio:           "Toole",
-		PhoneNumber:   "09170777331",
+		Bio:           models.StringPtr("Toole"),
+		PhoneNumber:   models.StringPtr("09170777331"),
 		EmailVerified: true,
 		IsActive:      true,
-		LastLoginAt:   time.Now(),
+		LastLoginAt:   models.TimePtr(time.Now()),
 	}
 }

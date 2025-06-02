@@ -100,11 +100,6 @@ func (r *userRepository) Create(ctx context.Context, user *models.User) error {
 		INSERT INTO users (id, email, password, first_name, last_name, bio, phone_number, email_verified, is_active, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 	`
-
-	user.ID = uuid.New()
-	user.CreatedAt = user.CreatedAt
-	user.UpdatedAt = user.UpdatedAt
-
 	_, err := r.db.Exec(ctx, query,
 		user.ID,
 		user.Email,

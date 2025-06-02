@@ -40,6 +40,11 @@ func (suite *UserRepositoryTestSuite) SetupSuite() {
 
 	repo := NewUserRepository(db)
 	suite.repo = repo
+
+	err = runSQLFiles(suite.ctx, suite.db, "../database/migrations")
+	if err != nil {
+		return
+	}
 }
 
 func (suite *UserRepositoryTestSuite) TearDownSuite() {
