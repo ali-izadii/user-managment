@@ -84,7 +84,6 @@ func runSQLFiles(ctx context.Context, db *pgxpool.Pool, sqlDir string) error {
 			return fmt.Errorf("failed to read SQL file %s: %w", filename, err)
 		}
 
-		// Execute SQL
 		_, err = db.Exec(ctx, string(sqlContent))
 		if err != nil {
 			return fmt.Errorf("failed to execute SQL file %s: %w", filename, err)
