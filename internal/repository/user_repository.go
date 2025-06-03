@@ -10,16 +10,6 @@ import (
 	"user-management/internal/models"
 )
 
-type UserRepository interface {
-	GetByID(ctx context.Context, id uuid.UUID) (*models.User, error)
-	GetAll(ctx context.Context, limit, offset int) ([]*models.User, error)
-	GetByEmail(ctx context.Context, email string) (*models.User, error)
-	Create(ctx context.Context, user *models.User) error
-	Update(ctx context.Context, user *models.User) error
-	Delete(ctx context.Context, id uuid.UUID) error
-	//UpdateLastLogin(ctx context.Context, id uuid.UUID) error
-}
-
 type userRepository struct {
 	db *pgxpool.Pool
 }
